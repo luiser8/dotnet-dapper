@@ -2,6 +2,8 @@ using dotnet_dapper.Repository;
 using Microsoft.AspNetCore.Mvc;
 using dotnet_dapper.Services;
 using System.Text.Json.Serialization;
+using System.Data.Common;
+using System.Data.SqlClient;
 
 var builder = WebApplication.CreateBuilder(args);
 var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
@@ -35,6 +37,16 @@ builder.Services.AddCors(options =>
                         .WithMethods("GET", "POST", "PUT", "DELETE", "PATCH");
                 });
     });
+builder.Services.AddScoped<Lazy<DbConnection>>(_ =>
+    {
+        return new Lazy<DbConnection>(() =>
+        {
+            var connection = new SqlConnection(builder.Configuration.GetConnectionString("DefaultConnection"));
+            connection.Open();
+            return connection;
+        });
+    });
+builder.Services.AddScoped<ICommandExecuter, CommandExecuter>();
 builder.Services.AddScoped<IProductRepository, ProductRepository>();
 builder.Services.AddScoped<IClientRepository, ClientRepository>();
 builder.Services.AddScoped<IOrderRepository, OrderRepository>();

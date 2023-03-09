@@ -22,5 +22,17 @@ namespace dotnet_dapper.Services
                 throw new NotImplementedException(ex.Message);
             }
         }
+
+        public Task<Client> CreateClients(Client client)
+        {
+            try
+            {
+                return _clientRepository.CreateClients(client);
+            }
+            catch (Exception ex)
+            {
+                throw new NotImplementedException(ex.Message);
+            }
+        }
     }
 }

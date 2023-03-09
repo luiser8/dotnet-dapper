@@ -20,7 +20,7 @@ namespace dotnet_dapper.Controllers
         /// <remarks>It is possible return products list.</remarks>
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<ActionResult<string>> GetProducts()
+        public async Task<ActionResult<Product>> GetProducts()
         {
             try
             {

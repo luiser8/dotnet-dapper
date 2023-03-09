@@ -4,6 +4,6 @@ namespace dotnet_dapper.Repository
 {
     public interface IOrderRepository
     {
-        Task<List<string>> GetOrdersRepository();
+        Task<List<Order>> GetOrdersRepository();
     }
 }

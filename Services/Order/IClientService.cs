@@ -4,6 +4,6 @@ namespace dotnet_dapper.Services
 {
     public interface IOrderService
     {
-        Task<List<string>> GetOrdersService();
+        Task<List<Order>> GetOrdersService();
     }
 }

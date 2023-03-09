@@ -11,7 +11,7 @@ namespace dotnet_dapper.Services
             _productRepository = productRepository;
         }
 
-        public Task<List<string>> GetProductsService()
+        public Task<List<Product>> GetProductsService()
         {
             try
             {

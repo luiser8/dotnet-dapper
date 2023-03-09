@@ -1,18 +1,23 @@
+using Dapper;
 using dotnet_dapper.Entities;
 
 namespace dotnet_dapper.Repository
 {
     public class OrderRepository : IOrderRepository
     {
-        public OrderRepository()
+        private readonly ICommandExecuter _commandExecuter;
+        public OrderRepository(ICommandExecuter commandExecuter)
         {
-
+            _commandExecuter = commandExecuter;
         }
-        public async Task<List<string>> GetOrdersRepository()
+        public async Task<List<Order>> GetOrdersRepository()
         {
             try
             {
-                return new List<string>();
+                var query = "SELECT * FROM Orders";
+                var products = (await _commandExecuter.ExecuteCommandAsync(connection =>
+                    connection.QueryAsync<Order>(query))).ToList();
+                return products;
             }
             catch (Exception ex)
             {

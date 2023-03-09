@@ -4,6 +4,6 @@ namespace dotnet_dapper.Repository
 {
     public interface IProductRepository
     {
-        Task<List<string>> GetProductsRepository();
+        Task<List<Product>> GetProductsRepository();
     }
 }

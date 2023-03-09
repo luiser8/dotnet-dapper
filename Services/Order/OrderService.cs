@@ -11,7 +11,7 @@ namespace dotnet_dapper.Services
             _orderRepository = orderRepository;
         }
 
-        public Task<List<string>> GetOrdersService()
+        public Task<List<Order>> GetOrdersService()
         {
             try
             {

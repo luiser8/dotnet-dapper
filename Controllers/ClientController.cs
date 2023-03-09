@@ -32,5 +32,22 @@ namespace dotnet_dapper.Controllers
                 return BadRequest(ex.Message);
             }
         }
+
+        /// <summary>Clients creation</summary>
+        /// <remarks>It is possible return client creation.</remarks>
+        [HttpPost]
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        public async Task<ActionResult<Client>> PostClients(Client client)
+        {
+            try
+            {
+                var response = await _clientService.CreateClients(client);
+                return Ok(response);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
     }
 }
