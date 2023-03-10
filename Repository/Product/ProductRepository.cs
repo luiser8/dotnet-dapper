@@ -24,5 +24,21 @@ namespace dotnet_dapper.Repository
                 throw new NotImplementedException(ex.Message);
             }
         }
+
+        public async Task<Product> CreateProducts(Product product)
+        {
+            try
+            {
+                var query = @"INSERT INTO Products (ProductName, ProductDesc, ProductPrice)
+                                VALUES(@ProductName, @ProductDesc, @ProductPrice) SELECT SCOPE_IDENTITY();";
+                var sqlParams = new { ProductName = product.ProductName, ProductDesc = product.ProductDesc, ProductPrice = product.ProductPrice };
+                product.ProductId = await _commandExecuter.ExecuteCommandAsync(connection => connection.ExecuteScalarAsync<int>(query, sqlParams));
+                return product;
+            }
+            catch (Exception ex)
+            {
+                throw new NotImplementedException(ex.Message);
+            }
+        }
     }
 }

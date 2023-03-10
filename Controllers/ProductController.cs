@@ -32,5 +32,22 @@ namespace dotnet_dapper.Controllers
                 return BadRequest(ex.Message);
             }
         }
+
+        /// <summary>Products creation</summary>
+        /// <remarks>It is possible return product creation.</remarks>
+        [HttpPost]
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        public async Task<ActionResult<Product>> PostProducts(Product client)
+        {
+            try
+            {
+                var response = await _productService.CreateProducts(client);
+                return Ok(response);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
     }
 }

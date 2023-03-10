@@ -22,5 +22,17 @@ namespace dotnet_dapper.Services
                 throw new NotImplementedException(ex.Message);
             }
         }
+
+        public Task<Product> CreateProducts(Product product)
+        {
+            try
+            {
+                return _productRepository.CreateProducts(product);
+            }
+            catch (Exception ex)
+            {
+                throw new NotImplementedException(ex.Message);
+            }
+        }
     }
 }
