@@ -24,5 +24,21 @@ namespace dotnet_dapper.Repository
                 throw new NotImplementedException(ex.Message);
             }
         }
+
+        public async Task<Order> CreateOrders(Order order)
+        {
+            try
+            {
+                var query = @"INSERT INTO Orders (ClientId, ProductId)
+                                VALUES(@ClientId, @ProductId) SELECT SCOPE_IDENTITY();";
+                var sqlParams = new { ClientId = order.ClientId, ProductId = order.ProductId };
+                order.OrderId = await _commandExecuter.ExecuteCommandAsync(connection => connection.ExecuteScalarAsync<int>(query, sqlParams));
+                return order;
+            }
+            catch (Exception ex)
+            {
+                throw new NotImplementedException(ex.Message);
+            }
+        }
     }
 }

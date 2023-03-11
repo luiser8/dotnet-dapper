@@ -26,6 +26,21 @@ namespace dotnet_dapper.Repository
             }
         }
 
+        public async Task<Client> GetClientsByIdRepository(int ClientId)
+        {
+            try
+            {
+                var query = "SELECT * FROM Clients WHERE ClientId = @ClientId";
+                var client = (await _commandExecuter.ExecuteCommandAsync(connection =>
+                    connection.QueryAsync<Client>(query))).SingleOrDefault();
+                return client;
+            }
+            catch (Exception ex)
+            {
+                throw new NotImplementedException(ex.Message);
+            }
+        }
+
         public async Task<Client> CreateClients(Client client)
         {
             try

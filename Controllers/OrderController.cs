@@ -32,5 +32,22 @@ namespace dotnet_dapper.Controllers
                 return BadRequest(ex.Message);
             }
         }
+
+        /// <summary>Orders creation</summary>
+        /// <remarks>It is possible return order creation.</remarks>
+        [HttpPost]
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        public async Task<ActionResult<Order>> PostOrders(Order order)
+        {
+            try
+            {
+                var response = await _orderService.CreateOrders(order);
+                return Ok(response);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
     }
 }

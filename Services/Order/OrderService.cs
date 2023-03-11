@@ -22,5 +22,17 @@ namespace dotnet_dapper.Services
                 throw new NotImplementedException(ex.Message);
             }
         }
+
+        public Task<Order> CreateOrders(Order order)
+        {
+            try
+            {
+                return _orderRepository.CreateOrders(order);
+            }
+            catch (Exception ex)
+            {
+                throw new NotImplementedException(ex.Message);
+            }
+        }
     }
 }
