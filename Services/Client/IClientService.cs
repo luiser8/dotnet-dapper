@@ -5,6 +5,7 @@ namespace dotnet_dapper.Services
     public interface IClientService
     {
         Task<List<Client>> GetClientsService();
-        Task<Client> CreateClients(Client client);
+        Task<Client> GetClientsByIdService(int clientId);
+        Task<Client> CreateClientsService(Client client);
     }
 }

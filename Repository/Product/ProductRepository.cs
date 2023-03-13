@@ -25,7 +25,23 @@ namespace dotnet_dapper.Repository
             }
         }
 
-        public async Task<Product> CreateProducts(Product product)
+       public async Task<Product> GetProductsByIdRepository(int productId)
+        {
+            try
+            {
+                var query = "SELECT * FROM Products WHERE ProductId = @ProductId";
+                var sqlParams = new { ProductId = productId };
+                var product = (await _commandExecuter.ExecuteCommandAsync(connection =>
+                    connection.QueryAsync<Product>(query, sqlParams))).SingleOrDefault();
+                return product ?? new Product {};
+            }
+            catch (Exception ex)
+            {
+                throw new NotImplementedException(ex.Message);
+            }
+        }
+
+        public async Task<Product> CreateProductsRepository(Product product)
         {
             try
             {

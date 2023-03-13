@@ -25,7 +25,23 @@ namespace dotnet_dapper.Repository
             }
         }
 
-        public async Task<Order> CreateOrders(Order order)
+        public async Task<Order> GetOrdersByIdRepository(int orderId)
+        {
+            try
+            {
+                var query = "SELECT * FROM Orders WHERE OrderId = @OrderId";
+                var sqlParams = new { OrderId = orderId };
+                var order = (await _commandExecuter.ExecuteCommandAsync(connection =>
+                    connection.QueryAsync<Order>(query, sqlParams))).SingleOrDefault();
+                return order ?? new Order {};
+            }
+            catch (Exception ex)
+            {
+                throw new NotImplementedException(ex.Message);
+            }
+        }
+
+        public async Task<Order> CreateOrdersRepository(Order order)
         {
             try
             {

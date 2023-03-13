@@ -23,11 +23,23 @@ namespace dotnet_dapper.Services
             }
         }
 
-        public Task<Product> CreateProducts(Product product)
+        public Task<Product> GetProductsByIdService(int productId)
         {
             try
             {
-                return _productRepository.CreateProducts(product);
+                return _productRepository.GetProductsByIdRepository(productId);
+            }
+            catch (Exception ex)
+            {
+                throw new NotImplementedException(ex.Message);
+            }
+        }
+
+        public Task<Product> CreateProductsService(Product product)
+        {
+            try
+            {
+                return _productRepository.CreateProductsRepository(product);
             }
             catch (Exception ex)
             {

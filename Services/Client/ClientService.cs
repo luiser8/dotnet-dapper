@@ -23,11 +23,23 @@ namespace dotnet_dapper.Services
             }
         }
 
-        public Task<Client> CreateClients(Client client)
+        public Task<Client> GetClientsByIdService(int clientId)
         {
             try
             {
-                return _clientRepository.CreateClients(client);
+                return _clientRepository.GetClientsByIdRepository(clientId);
+            }
+            catch (Exception ex)
+            {
+                throw new NotImplementedException(ex.Message);
+            }
+        }
+
+        public Task<Client> CreateClientsService(Client client)
+        {
+            try
+            {
+                return _clientRepository.CreateClientsRepository(client);
             }
             catch (Exception ex)
             {

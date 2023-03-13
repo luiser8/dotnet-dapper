@@ -33,15 +33,34 @@ namespace dotnet_dapper.Controllers
             }
         }
 
-        /// <summary>Products creation</summary>
-        /// <remarks>It is possible return product creation.</remarks>
-        [HttpPost]
-        [ProducesResponseType(StatusCodes.Status201Created)]
-        public async Task<ActionResult<Product>> PostProducts(Product client)
+        /// <summary>Product single</summary>
+        /// <remarks>It is possible return product.</remarks>
+        /// <param name="productId" example="1">Parameters to get product.</param>
+        [HttpGet("{productId}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public async Task<ActionResult<Product>> GetProductsById(int productId)
         {
             try
             {
-                var response = await _productService.CreateProducts(client);
+                var response = await _productService.GetProductsByIdService(productId);
+                return Ok(response);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        /// <summary>Products creation</summary>
+        /// <remarks>It is possible return product creation.</remarks>
+        /// <param name="product">Parameters to post product.</param>
+        [HttpPost]
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        public async Task<ActionResult<Product>> PostProducts(Product product)
+        {
+            try
+            {
+                var response = await _productService.CreateProductsService(product);
                 return Ok(response);
             }
             catch (Exception ex)

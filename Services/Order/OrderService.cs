@@ -23,11 +23,22 @@ namespace dotnet_dapper.Services
             }
         }
 
-        public Task<Order> CreateOrders(Order order)
+        public Task<Order> GetOrdersByIdService(int orderId)
         {
             try
             {
-                return _orderRepository.CreateOrders(order);
+                return _orderRepository.GetOrdersByIdRepository(orderId);
+            }
+            catch (Exception ex)
+            {
+                throw new NotImplementedException(ex.Message);
+            }
+        }
+        public Task<Order> CreateOrdersService(Order order)
+        {
+            try
+            {
+                return _orderRepository.CreateOrdersRepository(order);
             }
             catch (Exception ex)
             {

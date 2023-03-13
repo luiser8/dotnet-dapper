@@ -26,14 +26,15 @@ namespace dotnet_dapper.Repository
             }
         }
 
-        public async Task<Client> GetClientsByIdRepository(int ClientId)
+        public async Task<Client> GetClientsByIdRepository(int clientId)
         {
             try
             {
                 var query = "SELECT * FROM Clients WHERE ClientId = @ClientId";
+                var sqlParams = new { ClientId = clientId };
                 var client = (await _commandExecuter.ExecuteCommandAsync(connection =>
-                    connection.QueryAsync<Client>(query))).SingleOrDefault();
-                return client;
+                    connection.QueryAsync<Client>(query, sqlParams))).SingleOrDefault();
+                return client ?? new Client {};
             }
             catch (Exception ex)
             {
@@ -41,7 +42,7 @@ namespace dotnet_dapper.Repository
             }
         }
 
-        public async Task<Client> CreateClients(Client client)
+        public async Task<Client> CreateClientsRepository(Client client)
         {
             try
             {
