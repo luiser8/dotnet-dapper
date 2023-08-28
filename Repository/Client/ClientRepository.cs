@@ -34,7 +34,7 @@ namespace dotnet_dapper.Repository
                 var sqlParams = new { ClientId = clientId };
                 var client = (await _commandExecuter.ExecuteCommandAsync(connection =>
                     connection.QueryAsync<Client>(query, sqlParams))).SingleOrDefault();
-                return client ?? new Client {};
+                return client ?? new Client { };
             }
             catch (Exception ex)
             {
@@ -47,7 +47,7 @@ namespace dotnet_dapper.Repository
             try
             {
                 var query = "INSERT INTO Clients (ClientName, ClientEmail) VALUES(@ClientName, @ClientEmail) SELECT SCOPE_IDENTITY();";
-                var sqlParams = new { ClientName = client.ClientName, ClientEmail = client.ClientEmail };
+                var sqlParams = new { client.ClientName, client.ClientEmail };
                 client.ClientId = await _commandExecuter.ExecuteCommandAsync(connection => connection.ExecuteScalarAsync<int>(query, sqlParams));
                 return client;
             }

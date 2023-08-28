@@ -1,4 +1,6 @@
 using dotnet_dapper.Entities;
+using dotnet_dapper.Requests;
+using dotnet_dapper.Responses;
 using dotnet_dapper.Services;
 using Microsoft.AspNetCore.Mvc;
 
@@ -20,7 +22,7 @@ namespace dotnet_dapper.Controllers
         /// <remarks>It is possible return orders list.</remarks>
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<ActionResult<string>> GetOrders()
+        public async Task<ActionResult<OrderResponses>> GetOrders()
         {
             try
             {
@@ -35,14 +37,14 @@ namespace dotnet_dapper.Controllers
 
         /// <summary>Order single</summary>
         /// <remarks>It is possible return order.</remarks>
-        /// <param name="orderId" example="1">Parameters to get order.</param>
-        [HttpGet("{orderId}")]
+        /// <param name="clientId" example="1">Parameters to get order.</param>
+        [HttpGet("{clientId}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<ActionResult<Order>> GetOrdersById(int orderId)
+        public async Task<ActionResult<Order>> GetOrdersById(int clientId)
         {
             try
             {
-                var response = await _orderService.GetOrdersByIdService(orderId);
+                var response = await _orderService.GetOrdersByClientIdService(clientId);
                 return Ok(response);
             }
             catch (Exception ex)
@@ -56,7 +58,7 @@ namespace dotnet_dapper.Controllers
         /// <param name="order">Parameters to post order.</param>
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created)]
-        public async Task<ActionResult<Order>> PostOrders(Order order)
+        public async Task<ActionResult<int>> PostOrders(OrderRequest order)
         {
             try
             {

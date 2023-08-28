@@ -25,7 +25,7 @@ namespace dotnet_dapper.Repository
             }
         }
 
-       public async Task<Product> GetProductsByIdRepository(int productId)
+        public async Task<Product> GetProductsByIdRepository(int productId)
         {
             try
             {
@@ -33,7 +33,7 @@ namespace dotnet_dapper.Repository
                 var sqlParams = new { ProductId = productId };
                 var product = (await _commandExecuter.ExecuteCommandAsync(connection =>
                     connection.QueryAsync<Product>(query, sqlParams))).SingleOrDefault();
-                return product ?? new Product {};
+                return product ?? new Product { };
             }
             catch (Exception ex)
             {
@@ -45,9 +45,9 @@ namespace dotnet_dapper.Repository
         {
             try
             {
-                var query = @"INSERT INTO Products (ProductName, ProductDesc, ProductPrice)
-                                VALUES(@ProductName, @ProductDesc, @ProductPrice) SELECT SCOPE_IDENTITY();";
-                var sqlParams = new { ProductName = product.ProductName, ProductDesc = product.ProductDesc, ProductPrice = product.ProductPrice };
+                var query = @"INSERT INTO Products (ProductName, ProductDesc, ProductPrice, ProductQuantity)
+                                VALUES(@ProductName, @ProductDesc, @ProductPrice, @ProductQuantity) SELECT SCOPE_IDENTITY();";
+                var sqlParams = new { product.ProductName, product.ProductDesc, product.ProductPrice, product.ProductQuantity };
                 product.ProductId = await _commandExecuter.ExecuteCommandAsync(connection => connection.ExecuteScalarAsync<int>(query, sqlParams));
                 return product;
             }

@@ -48,6 +48,7 @@ builder.Services.AddScoped<Lazy<DbConnection>>(_ =>
     });
 builder.Services.AddScoped<ICommandExecuter, CommandExecuter>();
 builder.Services.AddScoped<IProductRepository, ProductRepository>();
+builder.Services.AddScoped<IOrderProductRepository, OrderProductRepository>();
 builder.Services.AddScoped<IClientRepository, ClientRepository>();
 builder.Services.AddScoped<IOrderRepository, OrderRepository>();
 builder.Services.AddScoped<IProductService, ProductService>();

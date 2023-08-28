@@ -1,21 +1,31 @@
-using dotnet_dapper.Entities;
 using dotnet_dapper.Repository;
+using dotnet_dapper.Requests;
+using dotnet_dapper.Responses;
 
 namespace dotnet_dapper.Services
 {
     public class OrderService : IOrderService
     {
         private readonly IOrderRepository _orderRepository;
-        public OrderService(IOrderRepository orderRepository)
+        private readonly IOrderProductRepository _orderProductsRepository;
+        public OrderService(IOrderRepository orderRepository, IOrderProductRepository orderProductRepository)
         {
             _orderRepository = orderRepository;
+            _orderProductsRepository = orderProductRepository;
         }
 
-        public Task<List<Order>> GetOrdersService()
+        public async Task<List<OrderResponses>> GetOrdersService()
         {
             try
             {
-                return _orderRepository.GetOrdersRepository();
+                var orders = await _orderRepository.GetOrdersRepository();
+                foreach (var item in orders)
+                {
+                    var orderProducts = await _orderProductsRepository.GetOrderProductsRepository(item.OrderId);
+                    item.Products = orderProducts;
+                }
+
+                return orders;
             }
             catch (Exception ex)
             {
@@ -23,22 +33,37 @@ namespace dotnet_dapper.Services
             }
         }
 
-        public Task<Order> GetOrdersByIdService(int orderId)
+        public async Task<List<OrderResponses>> GetOrdersByClientIdService(int clientId)
         {
             try
             {
-                return _orderRepository.GetOrdersByIdRepository(orderId);
+                var orders = await _orderRepository.GetOrdersByClientIdRepository(clientId);
+                foreach (var item in orders)
+                {
+                    var orderProducts = await _orderProductsRepository.GetOrderProductsRepository(item.OrderId);
+                    item.Products = orderProducts;
+                }
+
+                return orders;
             }
             catch (Exception ex)
             {
                 throw new NotImplementedException(ex.Message);
             }
         }
-        public Task<Order> CreateOrdersService(Order order)
+        public async Task<int> CreateOrdersService(OrderRequest order)
         {
             try
             {
-                return _orderRepository.CreateOrdersRepository(order);
+                int orderId = await _orderRepository.CreateOrdersRepository(order);
+                if (orderId != 0)
+                {
+                    foreach (var item in order.Products)
+                    {
+                        await _orderProductsRepository.CreateOrderProductsRepository(item, orderId);
+                    }
+                }
+                return orderId;
             }
             catch (Exception ex)
             {

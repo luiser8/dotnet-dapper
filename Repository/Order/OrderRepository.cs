@@ -1,5 +1,6 @@
 using Dapper;
-using dotnet_dapper.Entities;
+using dotnet_dapper.Requests;
+using dotnet_dapper.Responses;
 
 namespace dotnet_dapper.Repository
 {
@@ -10,14 +11,20 @@ namespace dotnet_dapper.Repository
         {
             _commandExecuter = commandExecuter;
         }
-        public async Task<List<Order>> GetOrdersRepository()
+        public async Task<List<OrderResponses>> GetOrdersRepository()
         {
             try
             {
-                var query = "SELECT * FROM Orders";
-                var products = (await _commandExecuter.ExecuteCommandAsync(connection =>
-                    connection.QueryAsync<Order>(query))).ToList();
-                return products;
+                var query = @"SELECT OrderId
+                                ,ClientId
+                                ,OrderStatus
+                                ,OrderTotal
+                                ,OrderCreation
+                            FROM Orders";
+                var order = await _commandExecuter.ExecuteCommandAsync(connection =>
+                    connection.QueryAsync<OrderResponses>(query));
+
+                return (List<OrderResponses>)order;
             }
             catch (Exception ex)
             {
@@ -25,15 +32,20 @@ namespace dotnet_dapper.Repository
             }
         }
 
-        public async Task<Order> GetOrdersByIdRepository(int orderId)
+        public async Task<List<OrderResponses>> GetOrdersByClientIdRepository(int? ClientId)
         {
             try
             {
-                var query = "SELECT * FROM Orders WHERE OrderId = @OrderId";
-                var sqlParams = new { OrderId = orderId };
-                var order = (await _commandExecuter.ExecuteCommandAsync(connection =>
-                    connection.QueryAsync<Order>(query, sqlParams))).SingleOrDefault();
-                return order ?? new Order {};
+                var query = @"SELECT OrderId
+                                ,ClientId
+                                ,OrderStatus
+                                ,OrderTotal
+                                ,OrderCreation
+                            FROM Orders WHERE ClientId = IsNull(@ClientId, ClientId)";
+                var order = await _commandExecuter.ExecuteCommandAsync(connection =>
+                    connection.QueryAsync<OrderResponses>(query, new { ClientId }));
+
+                return (List<OrderResponses>)order;
             }
             catch (Exception ex)
             {
@@ -41,15 +53,16 @@ namespace dotnet_dapper.Repository
             }
         }
 
-        public async Task<Order> CreateOrdersRepository(Order order)
+        public async Task<int> CreateOrdersRepository(OrderRequest order)
         {
             try
             {
-                var query = @"INSERT INTO Orders (ClientId, ProductId)
-                                VALUES(@ClientId, @ProductId) SELECT SCOPE_IDENTITY();";
-                var sqlParams = new { ClientId = order.ClientId, ProductId = order.ProductId };
-                order.OrderId = await _commandExecuter.ExecuteCommandAsync(connection => connection.ExecuteScalarAsync<int>(query, sqlParams));
-                return order;
+                var queryOrder = @"INSERT INTO Orders (ClientId, OrderStatus, OrderTotal)
+                                VALUES(@ClientId, @OrderStatus, @OrderTotal) SELECT SCOPE_IDENTITY();";
+                var sqlParams = new { order.ClientId, OrderStatus = 1, order.OrderTotal };
+                int OrderId = await _commandExecuter.ExecuteCommandAsync(connection => connection.ExecuteScalarAsync<int>(queryOrder, sqlParams));
+
+                return OrderId;
             }
             catch (Exception ex)
             {
