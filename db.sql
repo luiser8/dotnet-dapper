@@ -39,3 +39,16 @@ CREATE TABLE OrderProducts
 	 CONSTRAINT FK_OrderId FOREIGN KEY (OrderId) REFERENCES Orders(OrderId) ,
 	 CONSTRAINT FK_ProductId FOREIGN KEY (ProductId) REFERENCES Products(ProductId)
 )
+
+SELECT o.OrderId, o.ClientId, o.OrderTotal, o.OrderStatus, o.OrderCreation,
+    JSON_QUERY((
+        SELECT op.OrderProductId, op.ProductId, p.ProductName, op.ProductQuantity,
+            op.OrderProductTotal, op.OrderProductStatus
+        FROM OrderProducts op
+        INNER JOIN Products p ON p.ProductId = op.ProductId
+        WHERE op.OrderId = o.OrderId
+        FOR JSON PATH
+    )) AS Products
+        FROM Orders o
+        FOR JSON PATH,
+        WITHOUT_ARRAY_WRAPPER
