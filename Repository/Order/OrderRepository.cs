@@ -1,5 +1,6 @@
 using System.Text.Json;
 using Dapper;
+using dotnet_dapper.Shared;
 using dotnet_dapper.Requests;
 using dotnet_dapper.Responses;
 

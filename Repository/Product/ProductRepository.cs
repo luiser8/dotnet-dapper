@@ -1,4 +1,5 @@
 using Dapper;
+using dotnet_dapper.Shared;
 using dotnet_dapper.Entities;
 
 namespace dotnet_dapper.Repository

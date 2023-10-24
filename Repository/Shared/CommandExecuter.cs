@@ -1,6 +1,6 @@
 using System.Data.Common;
 
-namespace dotnet_dapper.Repository
+namespace dotnet_dapper.Shared
 {
     public sealed class CommandExecuter : ICommandExecuter, IDisposable, IAsyncDisposable
     {
